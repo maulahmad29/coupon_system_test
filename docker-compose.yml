@@ -1,0 +1,30 @@
+services:
+  app:
+    container_name: go_coupon_system
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT}:3000"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "7432:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"coupon_system_test/db/migration"
 	"coupon_system_test/internal/config"
 	"fmt"
 	"os"
@@ -12,10 +13,15 @@ import (
 )
 
 func main() {
+	log.Info("Main start load")
 	initViper := config.NewViper()
 	initZeroLogger := config.NewZerolog(initViper)
 	initDbSqlx := config.NewSqlx(initViper)
 	initValidate := config.NewValidator(initViper)
+	if initViper.AppEnv != "production" {
+		migration.RunMigration(initViper)
+	}
+
 	initApp := config.NewApp(initViper, &initZeroLogger)
 
 	config.NewBootstrap(&config.Boostrap{
@@ -29,6 +35,9 @@ func main() {
 	go func() {
 		err := initApp.Listen(fmt.Sprintf(":%s", initViper.AppPort))
 		if err != nil {
+			if initViper.AppEnv != "production" {
+				migration.DropDatabase(initDbSqlx)
+			}
 			initDbSqlx.Close()
 			log.Fatal("Failed to start server :", err)
 		}
@@ -39,6 +48,9 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 
 	<-quit
+	if initViper.AppEnv != "production" {
+		migration.DropDatabase(initDbSqlx)
+	}
 	initDbSqlx.Close()
 	log.Info("Connection has been close")
 	log.Info("Fiber has been shutdown")

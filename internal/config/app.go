@@ -2,9 +2,12 @@ package config
 
 import (
 	"coupon_system_test/sys"
+	"fmt"
 
+	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/rs/zerolog"
 )
 
@@ -17,8 +20,18 @@ func NewApp(cfg *sys.SysEnv, logger *zerolog.Logger) *fiber.App {
 		AppName: cfg.AppName,
 	})
 
+	app.Use(
+		fiberzerolog.New(fiberzerolog.Config{
+			Logger: logger,
+		}),
+		recover.New(recover.Config{
+			EnableStackTrace: true,
+		}),
+	)
+
 	if cfg.AppCors {
 		app.Use(cors.New())
+		fmt.Println("Enable cors")
 	}
 
 	return app
