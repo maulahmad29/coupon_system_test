@@ -2,6 +2,9 @@ package config
 
 import (
 	"coupon_system_test/internal/delivery/http"
+	"coupon_system_test/internal/handler"
+	"coupon_system_test/internal/repo"
+	"coupon_system_test/internal/usecase"
 	"coupon_system_test/sys"
 	"time"
 
@@ -25,5 +28,8 @@ type Boostrap struct {
 
 func NewBootstrap(cfg *Boostrap, session_start_at time.Time) {
 
-	http.NewRoute(cfg.App, session_start_at)
+	uow := repo.NewUnitOfWork(cfg.DbSqlx)
+	couponUseCase := usecase.NewCouponUseCase(uow)
+	couponHandler := handler.NewCouponHander(cfg.Validate, couponUseCase)
+	http.NewRoute(cfg.App, session_start_at, couponHandler)
 }

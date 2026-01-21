@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "cp_sys_doc_api",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

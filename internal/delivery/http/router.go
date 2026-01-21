@@ -1,6 +1,7 @@
 package http
 
 import (
+	"coupon_system_test/internal/handler"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,7 +11,7 @@ type Route struct {
 	App *fiber.App
 }
 
-func NewRoute(app *fiber.App, session_start_at time.Time) Route {
+func NewRoute(app *fiber.App, session_start_at time.Time, couponHandler handler.ICouponHandler) Route {
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(
@@ -29,6 +30,8 @@ func NewRoute(app *fiber.App, session_start_at time.Time) Route {
 			},
 		)
 	})
+
+	app.Post("/coupon/create", couponHandler.CreateCoupon)
 
 	return Route{
 		App: app,

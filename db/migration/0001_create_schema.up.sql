@@ -3,7 +3,7 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS coupon (
     coupon_id UUID NOT NULL,
     coupon_name VARCHAR(20),
-    ammount INT NOT NULL DEFAULT 0,
+    amount INT NOT NULL DEFAULT 0,
     remaining_amount INT NOT NULL DEFAULT 0 CHECK (remaining_amount > 0),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ,
@@ -17,7 +17,7 @@ ON coupon(coupon_name);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_coupon_name_del
 ON coupon(deleted_at);
 
-COMMENT ON COLUMN coupon.ammount IS 'Initial amount';
+COMMENT ON COLUMN coupon.amount IS 'Initial amount';
 COMMENT ON COLUMN coupon.remaining_amount IS 'This is amount stock for retrive or add';
 
 CREATE TABLE IF NOT EXISTS coupon_claim_history (
