@@ -10,5 +10,5 @@ type CouponClaimRequest struct {
 }
 
 type CouponDetailRequest struct {
-	CouponName string `json:"coupon_name" validate:"required,min=5,max=20"`
+	CouponName string
 }

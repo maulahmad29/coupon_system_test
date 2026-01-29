@@ -1,19 +1,19 @@
 meta {
-  name: Coupon Create
+  name: Coupon Claim
   type: http
-  seq: 1
+  seq: 2
 }
 
 post {
-  url: 127.0.0.1:3000/api/coupons
+  url: 127.0.0.1:3000/api/coupons/claim
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "coupon_name": "COUPON_DOUBLE_DIP",
-    "amount": 50
+    "user_id":"user124",
+    "coupon_name":"COUPON_B"
   }
 }
 

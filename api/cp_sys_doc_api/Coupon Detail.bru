@@ -1,0 +1,20 @@
+meta {
+  name: Coupon Detail
+  type: http
+  seq: 3
+}
+
+get {
+  url: 127.0.0.1:3000/api/coupons/:coupon_name
+  body: none
+  auth: inherit
+}
+
+params:path {
+  coupon_name: COUPON_FLASH_SALE
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

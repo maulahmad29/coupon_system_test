@@ -28,8 +28,8 @@ type Boostrap struct {
 
 func NewBootstrap(cfg *Boostrap, session_start_at time.Time) {
 
-	uow := repo.NewUnitOfWork(cfg.DbSqlx)
-	couponUseCase := usecase.NewCouponUseCase(uow)
+	couponRepo := repo.NewCouponRepo()
+	couponUseCase := usecase.NewCouponUseCase(cfg.DbSqlx, couponRepo)
 	couponHandler := handler.NewCouponHander(cfg.Validate, couponUseCase)
 	http.NewRoute(cfg.App, session_start_at, couponHandler)
 }

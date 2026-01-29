@@ -31,7 +31,11 @@ func NewRoute(app *fiber.App, session_start_at time.Time, couponHandler handler.
 		)
 	})
 
-	app.Post("/coupon/create", couponHandler.CreateCoupon)
+	app.Post("api/coupons/", couponHandler.CreateCoupon)
+
+	app.Get("api/coupons/:coupon_name", couponHandler.GetCouponDetailClaims)
+
+	app.Post("api/coupons/claim", couponHandler.ClaimCoupon)
 
 	return Route{
 		App: app,
